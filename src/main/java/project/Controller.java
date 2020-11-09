@@ -8,7 +8,7 @@ import javafx.scene.input.KeyCode;
 import java.io.IOException;
 
 public class Controller {
-    View a = new View();
+    View a;
 
     @FXML
     TextField nickTF;
@@ -16,6 +16,7 @@ public class Controller {
     private boolean gameStopped = false;
 
     public Scene window() throws IOException {
+        a = new View();
         Scene window = new Scene(a.createParent());
 
         window.setOnKeyPressed(keyEvent -> {
@@ -31,7 +32,7 @@ public class Controller {
                 case SPACE:
                     attack();
                     break;
-                case ENTER:
+                case ESCAPE:
                     if (gameStopped && !Model.gameOver) {
                         View.timeline.play();
                         gameStopped = false;
@@ -40,6 +41,9 @@ public class Controller {
                         View.timeline.stop();
                         gameStopped = true;
                     }
+                    break;
+                case ENTER:
+                    startGame();
                     break;
             }
         });
@@ -53,9 +57,21 @@ public class Controller {
 
     public void startNewGame() throws IOException {
         Model.nickname = nickTF.getText();
-        Main.mainStage.setScene(window());
+        startGame();
+    }
+
+    public void startGame() {
+        View.timeline.stop();
         Model.gameOver = false;
+        if (View.timeline.getKeyFrames().size() != 0) View.timeline.getKeyFrames().remove(0);
+        Model.invadersMovesCounter = 0;
+        try {
+            Main.mainStage.setScene(window());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         View.timeline.play();
+        gameStopped = false;
     }
 
     public void attack() {

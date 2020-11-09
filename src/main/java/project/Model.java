@@ -22,7 +22,7 @@ public class Model {
     static ObservableList<Node> invadersTeam;
     static ObservableList<Node> invadersAttack;
     static Direction motherShipDirection = Direction.NOWHERE;
-    private static int invadersMovesCounter = 0;
+    public static int invadersMovesCounter = 0;
     private static int attackCounter = 0;
 
     public static void moveMotherShip() throws IOException {
